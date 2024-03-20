@@ -28,6 +28,8 @@ const Statistics = ({good, neutral, bad}) => {
   if (total != 0) {
     average = (good + bad * (-1)) / total
     positive = (good / total * 100) + "%"
+  } else {
+    return <div>No feedback given</div>
   }
 
   return (
