@@ -15,6 +15,16 @@ const App = () => {
   const [selected, setSelected] = useState(0)
   const [votes, updateVotes] = useState(new Uint8Array(8))
 
+  function returnBiggest() {
+    let indexOfBiggest = 0
+    for (let i in votes) {
+      if (votes[i] > votes[indexOfBiggest]) {
+        indexOfBiggest = i
+      }
+    }
+    return indexOfBiggest
+  }
+
 
   const selectRandom = () => {
     setSelected(Math.floor(Math.random()*8))
@@ -28,12 +38,20 @@ const App = () => {
 
   return (
     <div>
-    <div>
-      <p>{anecdotes[selected]}</p>
-      <p>Has {votes[selected]} votes</p>
-    </div>
-    <button onClick={selectRandom}>Next</button>
-    <button onClick={voteSelected}>Vote</button>
+      <div>
+        <h1>Anecdote of the day</h1>
+        <p>{anecdotes[selected]}</p>
+        <p>Has {votes[selected]} votes</p>
+      </div>
+      <div>
+        <button onClick={selectRandom}>Next Anecdote</button>
+        <button onClick={voteSelected}>Vote</button>
+      </div>
+      <div>
+        <h1>Anecdote with most votes</h1>
+        <p>{anecdotes[returnBiggest()]}</p>
+        <p>Has {votes[returnBiggest()]} votes</p>
+      </div>
     </div>
   )
 }
