@@ -34,16 +34,18 @@ const Statistics = ({good, neutral, bad}) => {
 
   return (
     <div>
-      <StatisticLine name="Good" value={good} />
-      <StatisticLine name="Neutral" value={neutral} />
-      <StatisticLine name="Bad" value={bad} />
-      <StatisticLine name="Total" value={total} />
-      <StatisticLine name="Average" value={average} />
-      <StatisticLine name="Positive" value={positive} />
+      <table>
+        <StatisticLine name="Good" value={good} />
+        <StatisticLine name="Neutral" value={neutral} />
+        <StatisticLine name="Bad" value={bad} />
+        <StatisticLine name="Total" value={total} />
+        <StatisticLine name="Average" value={average} />
+        <StatisticLine name="Positive" value={positive} />
+      </table>
     </div>
   )
 }
 
-const StatisticLine = ({name, value}) => <p>{name}: {value}</p>
+const StatisticLine = ({name, value}) => <tr><td>{name}</td><td>{value}</td></tr>
 
 export default App
