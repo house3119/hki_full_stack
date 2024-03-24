@@ -12,11 +12,17 @@ const App = () => {
 
   const handleClick = (event) => {
     event.preventDefault()
-    const personObject = {
-      name: newName
+    const nameList = persons.map(person => person.name.toLowerCase())
+
+    if (nameList.includes(newName.toLowerCase())) {
+      alert(`Yo man, ${newName} is already added to da phonebook`)
+    } else {
+      const personObject = {
+        name: newName
+      }
+      setPersons(persons.concat(personObject))
+      setNewName('')
     }
-    setPersons(persons.concat(personObject))
-    setNewName('')
   }
 
   return (
