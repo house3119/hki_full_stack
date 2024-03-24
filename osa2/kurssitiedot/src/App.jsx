@@ -17,6 +17,11 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
+      },
+      {
+        name: 'Redux',
+        exercises: 11,
+        id: 4
       }
     ]
   }
@@ -47,10 +52,19 @@ const Content = ({ parts }) => {
         partName = {part.name}
         partExercises = {part.exercises}
       />)}
+      <Total parts={parts}/>
     </div>
   )
 }
 
 const Part = ({ partName, partExercises }) => <p>{partName} {partExercises}</p>
+
+const Total = ({ parts }) => {
+  let total = 0;
+  for (let part of parts) {
+    total += part.exercises
+  }
+  return <p><b>Total of {total} exercises</b></p>
+}
 
 export default App
