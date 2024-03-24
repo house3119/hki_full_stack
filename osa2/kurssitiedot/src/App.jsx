@@ -1,39 +1,59 @@
 const App = () => {
-  const course1 = {
-    name: 'Half Stack application development',
-    id: 1,
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10,
-        id: 1
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7,
-        id: 2
-      },
-      {
-        name: 'State of a component',
-        exercises: 14,
-        id: 3
-      },
-      {
-        name: 'Redux',
-        exercises: 11,
-        id: 4
-      }
-    ]
-  }
+
+  const courses = [
+    {
+      name: 'Half Stack application development',
+      id: 1,
+      parts: [
+        {
+          name: 'Fundamentals of React',
+          exercises: 10,
+          id: 1
+        },
+        {
+          name: 'Using props to pass data',
+          exercises: 7,
+          id: 2
+        },
+        {
+          name: 'State of a component',
+          exercises: 14,
+          id: 3
+        },
+        {
+          name: 'Redux',
+          exercises: 11,
+          id: 4
+        }
+      ]
+    }, 
+    {
+      name: 'Node.js',
+      id: 2,
+      parts: [
+        {
+          name: 'Routing',
+          exercises: 3,
+          id: 1
+        },
+        {
+          name: 'Middlewares',
+          exercises: 7,
+          id: 2
+        }
+      ]
+    }
+  ]
 
   return (
     <div>
-      <Course course = {course1} />
+      {courses.map(course => <Course course={course}/>)}
     </div>
   )
 }
 
 const Course = ({ course }) => {
+  console.log(course)
   return (
     <div>
       <Header header = {course.name} />
@@ -61,7 +81,7 @@ const Part = ({ partName, partExercises }) => <p>{partName} {partExercises}</p>
 
 const Total = ({ exercisesList }) => {
   const start = 0
-  
+
   const total = exercisesList.reduce(
     (summa, edellinen) => summa + edellinen, start
   )
