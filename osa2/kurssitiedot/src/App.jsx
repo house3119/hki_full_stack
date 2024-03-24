@@ -23,7 +23,7 @@ const App = () => {
 
   return (
     <div>
-      <Course course={course1} />
+      <Course course = {course1} />
     </div>
   )
 }
@@ -31,20 +31,26 @@ const App = () => {
 const Course = ({ course }) => {
   return (
     <div>
-      <Header header={ course.name } />
-      <Content parts={ course.parts }/>
+      <Header header = {course.name} />
+      <Content parts = {course.parts} />
     </div>
   )
 }
 
-const Header = ({ header }) => <h1>{ header }</h1>
+const Header = ({ header }) => <h1>{header}</h1>
 
 const Content = ({ parts }) => {
   return (
     <div>
-      {parts.map(part => <p key={ part.id }>{part.name} {part.exercises}</p>)}
+      {parts.map(part => <Part
+        key = {part.id}
+        partName = {part.name}
+        partExercises = {part.exercises}
+      />)}
     </div>
   )
 }
+
+const Part = ({ partName, partExercises }) => <p>{partName} {partExercises}</p>
 
 export default App
