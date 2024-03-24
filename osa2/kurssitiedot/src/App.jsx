@@ -52,18 +52,20 @@ const Content = ({ parts }) => {
         partName = {part.name}
         partExercises = {part.exercises}
       />)}
-      <Total parts={parts}/>
+      <Total exercisesList={parts.map(part => part.exercises)}/>
     </div>
   )
 }
 
 const Part = ({ partName, partExercises }) => <p>{partName} {partExercises}</p>
 
-const Total = ({ parts }) => {
-  let total = 0;
-  for (let part of parts) {
-    total += part.exercises
-  }
+const Total = ({ exercisesList }) => {
+  const start = 0
+  
+  const total = exercisesList.reduce(
+    (summa, edellinen) => summa + edellinen, start
+  )
+
   return <p><b>Total of {total} exercises</b></p>
 }
 
