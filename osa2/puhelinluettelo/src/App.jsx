@@ -1,4 +1,8 @@
 import { useState } from 'react'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import NumberList from './components/NumberList'
+
 
 const App = () => {
   const all_persons = [
@@ -17,7 +21,7 @@ const App = () => {
     setNewName(event.target.value)
   }
 
-  const hanleNumberChange = (event) => {
+  const handleNumberChange = (event) => {
     setNewNumber(event.target.value)
   }
 
@@ -26,21 +30,11 @@ const App = () => {
       setFilterApplied(false)
     } else {
       setFilterApplied(true)
-      setFilter(event.target.value)
     }
+    setFilter(event.target.value.toLowerCase())
   }
 
-  const personsToShow = filterApplied
-    ? persons.map(person => {
-      if (person.name.toLowerCase().includes(filter)) {
-        return person
-      }
-    }).filter((element) => {
-      return element
-    })
-    : persons
-
-  function handleClick(event) {
+  const handleClick = (event) => {
     event.preventDefault()
     const nameList = persons.map(person => person.name.toLowerCase())
 
@@ -57,39 +51,32 @@ const App = () => {
     }
   }
 
+  const personsToShow = filterApplied
+    ? persons.map(person => {
+        if (person.name.toLowerCase().includes(filter)) {
+          return person
+        }
+        }).filter((element) => {
+          return element
+        })
+    : persons
+
   return (
     <div>
       <h1>Phonebook</h1>
-      <h2>Filter</h2>
-      <form>
-        <div>
-          Filter<input onChange={handleFilter}/>
-        </div>
-      </form>
+      <Filter handleFilter={handleFilter}/>
       <h2>Add new</h2>
-      <form>
-        <div>
-          Name: <input onChange={handleNameChange} value={newName} />
-        </div>
-        <div>
-          Number: <input onChange={hanleNumberChange} value={newNumber} />
-        </div>
-        <div>
-          <button type="submit" onClick={handleClick}>add</button>
-        </div>
-      </form>
+      <PersonForm
+        newName={newName}
+        newNumber={newNumber}
+        handleNameChange={handleNameChange}
+        handleNumberChange={handleNumberChange}
+        handleClick={handleClick}
+      />
       <h2>Numbers</h2>
-      {personsToShow.map(person =>
-        <Number
-          name = {person.name}
-          key = {person.name}
-          number = {person.number}
-        />
-      )}
+      <NumberList personsToShow={personsToShow} />
     </div>
   )
 }
-
-const Number = ({ name, key, number }) => <p key={key}>{name} {number}</p>
 
 export default App
