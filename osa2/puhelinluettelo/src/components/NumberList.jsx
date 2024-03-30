@@ -4,7 +4,7 @@ const NumberList = ({personsToShow}) => {
         {personsToShow.map(person =>
             <Number
               name = {person.name}
-              key = {person.name}
+              key = {person.id}
               number = {person.number}
             />
           )}
