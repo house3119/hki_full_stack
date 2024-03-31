@@ -13,12 +13,9 @@ const App = () => {
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    console.log('effect')
     axios
       .get('http://localhost:3001/persons')
       .then( response => {
-        console.log('promise fulfilled')
-        console.log(response.data)
         setPersons(response.data)
       })
   }, [])
@@ -51,10 +48,15 @@ const App = () => {
         name: newName,
         number: newNumber,
         id: nameList.length + 1
-      }
-      setPersons(persons.concat(personObject))
-      setNewName('')
-      setNewNumber('')
+    }
+
+    axios
+      .post('http://localhost:3001/persons', personObject)
+      .then(response => setPersons(persons.concat(response.data)))
+      .catch(error => console.log(error))
+      
+    setNewName('')
+    setNewNumber('')
     }
   }
 
