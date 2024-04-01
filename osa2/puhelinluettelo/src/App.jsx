@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import NumberList from './components/NumberList'
+import phonebookService from './services/phonebookService'
 
 
 const App = () => {
@@ -13,11 +13,11 @@ const App = () => {
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then( response => {
-        setPersons(response.data)
-      })
+    phonebookService
+      .getAllPersons()
+      .then(allPersons => setPersons(allPersons))
+      .catch(error => console.log(error))
+
   }, [])
 
   const handleNameChange = (event) => {
@@ -50,9 +50,9 @@ const App = () => {
         id: nameList.length + 1
     }
 
-    axios
-      .post('http://localhost:3001/persons', personObject)
-      .then(response => setPersons(persons.concat(response.data)))
+    phonebookService
+      .addNewPerson(personObject)
+      .then(newPerson => setPersons(persons.concat(newPerson)))
       .catch(error => console.log(error))
       
     setNewName('')
