@@ -47,7 +47,7 @@ const App = () => {
       const personObject = {
         name: newName,
         number: newNumber,
-        id: nameList.length + 1
+        id: (nameList.length + 1).toString()
     }
 
     phonebookService
@@ -58,6 +58,19 @@ const App = () => {
     setNewName('')
     setNewNumber('')
     }
+  }
+
+  const handleDelete = (id) => {
+    if (!window.confirm(`Really remove ${persons.find(person => person.id === id).name}?`)) {
+      return
+    }
+    
+    phonebookService
+      .deletePerson(id)
+      .then(response => {
+        setPersons(persons.filter(person => person.id !== response.id))
+      })
+      .catch(error => console.log(error))
   }
 
   const personsToShow = filterApplied
@@ -83,7 +96,7 @@ const App = () => {
         handleClick={handleClick}
       />
       <h2>Numbers</h2>
-      <NumberList personsToShow={personsToShow} />
+      <NumberList personsToShow={personsToShow} handleDelete={handleDelete}/>
     </div>
   )
 }
