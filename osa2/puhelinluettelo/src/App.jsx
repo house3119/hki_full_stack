@@ -17,7 +17,6 @@ const App = () => {
       .getAllPersons()
       .then(allPersons => setPersons(allPersons))
       .catch(error => console.log(error))
-
   }, [])
 
   const handleNameChange = (event) => {
@@ -42,21 +41,45 @@ const App = () => {
     const nameList = persons.map(person => person.name.toLowerCase())
 
     if (nameList.includes(newName.toLowerCase())) {
-      alert(`Yo man, ${newName} is already added to da phonebook`)
+      if (confirm(`${newName} already exist in the phonebook. Wanna update the number?`)) {
+        const personToUpdate = persons.find(person => person.name.toLowerCase() === newName)
+        phonebookService
+          .updateNumber(personToUpdate, newNumber)
+          .then(() => {
+            phonebookService
+              .getAllPersons()
+              .then(response => {
+                setPersons(response)
+                setNewName('')
+                setNewNumber('')
+              })
+          })
+          .catch(error => console.log(error))
+      }      
     } else {
-      const personObject = {
-        name: newName,
-        number: newNumber,
-        id: (nameList.length + 1).toString()
-    }
+      let current
+      phonebookService
+        .getCurrentId()
+        .then(res => {
+          current = res.current
 
-    phonebookService
-      .addNewPerson(personObject)
-      .then(newPerson => setPersons(persons.concat(newPerson)))
+          const personObject = {
+            name: newName,
+            number: newNumber,
+            id: current.toString()
+          }
+  
+          phonebookService
+            .addNewPerson(personObject)
+            .then(newPerson => setPersons(persons.concat(newPerson)))
+
+          phonebookService
+            .incrementId(current)
+      })
       .catch(error => console.log(error))
-      
-    setNewName('')
-    setNewNumber('')
+
+      setNewName('')
+      setNewNumber('')
     }
   }
 
