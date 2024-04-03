@@ -18,10 +18,15 @@
     {
       "id": "12",
       "name": "Jeppe",
-      "number": "09-83763634"
+      "number": "89346893467"
+    },
+    {
+      "id": "14",
+      "name": "Jupe",
+      "number": "02-222222"
     }
   ],
   "idgen": {
-    "current": 13
+    "current": 15
   }
 }

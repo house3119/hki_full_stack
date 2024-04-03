@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import NumberList from './components/NumberList'
+import Notification from './components/Notification'
 import phonebookService from './services/phonebookService'
+import './index.css'
 
 
 const App = () => {
@@ -11,6 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filterApplied, setFilterApplied] = useState(false)
   const [filter, setFilter] = useState('')
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     phonebookService
@@ -45,7 +48,11 @@ const App = () => {
         const personToUpdate = persons.find(person => person.name.toLowerCase() === newName)
         phonebookService
           .updateNumber(personToUpdate, newNumber)
-          .then(() => {
+          .then((res) => {
+            setMessage(`${res.name}'s number updated!`)
+            setTimeout(() => {
+              setMessage(null)
+            }, 3000);
             phonebookService
               .getAllPersons()
               .then(response => {
@@ -71,7 +78,13 @@ const App = () => {
   
           phonebookService
             .addNewPerson(personObject)
-            .then(newPerson => setPersons(persons.concat(newPerson)))
+            .then(newPerson => {
+              setMessage(`${newPerson.name} added to the phonebook!`)
+              setTimeout(() => {
+                setMessage(null)
+              }, 3000);
+              setPersons(persons.concat(newPerson))
+            })
 
           phonebookService
             .incrementId(current)
@@ -91,6 +104,10 @@ const App = () => {
     phonebookService
       .deletePerson(id)
       .then(response => {
+        setMessage(`${response.name} removed from the phonebook!`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 3000);
         setPersons(persons.filter(person => person.id !== response.id))
       })
       .catch(error => console.log(error))
@@ -109,6 +126,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={message}/>
       <Filter handleFilter={handleFilter}/>
       <h2>Add new</h2>
       <PersonForm

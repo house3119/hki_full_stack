@@ -1,0 +1,13 @@
+
+
+
+.notification-div {
+    color: green;
+    background: lightgrey;
+    font-size: 20px;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 5px 15px 5px 14px;
+    margin-bottom: 10px;
+    width: fit-content;
+  }
