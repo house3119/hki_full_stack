@@ -19,14 +19,9 @@
       "id": "12",
       "name": "Jeppe",
       "number": "89346893467"
-    },
-    {
-      "id": "14",
-      "name": "Jupe",
-      "number": "02-222222"
     }
   ],
   "idgen": {
-    "current": 15
+    "current": 25
   }
 }

@@ -31,7 +31,7 @@ const deletePerson = personToBeDeletedId => {
 const updateNumber = (personToBeUpdated, newNumber) => {
     const updatedPerson = {...personToBeUpdated, number:newNumber}
     const request = axios.put(`${baseUrl}/${personToBeUpdated.id}`, updatedPerson)
-    return request.then(response => response.data)
+    return request.then(response => response.data).catch(() => {console.log('404')})
 }
 
 export default { getAllPersons, addNewPerson, deletePerson, updateNumber, getCurrentId, incrementId }

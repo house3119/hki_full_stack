@@ -13,7 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filterApplied, setFilterApplied] = useState(false)
   const [filter, setFilter] = useState('')
-  const [message, setMessage] = useState(null)
+  const [message, setMessage] = useState({'message': null})
 
   useEffect(() => {
     phonebookService
@@ -49,9 +49,9 @@ const App = () => {
         phonebookService
           .updateNumber(personToUpdate, newNumber)
           .then((res) => {
-            setMessage(`${res.name}'s number updated!`)
+            setMessage({'message': `${res.name}'s number updated!`})
             setTimeout(() => {
-              setMessage(null)
+              setMessage({'message': null})
             }, 3000);
             phonebookService
               .getAllPersons()
@@ -60,8 +60,22 @@ const App = () => {
                 setNewName('')
                 setNewNumber('')
               })
+          }).catch(() => {
+            setMessage({
+              'message': `Person ${personToUpdate.name} has already been removed from the phonebook`,
+              'type': 'notification-fail'
+            })
+            setTimeout(() => {
+              setMessage({'message': null})
+            }, 3000);
+            phonebookService
+            .getAllPersons()
+            .then(response => {
+              setPersons(response)
+              setNewName('')
+              setNewNumber('')
+            })
           })
-          .catch(error => console.log(error))
       }      
     } else {
       let current
@@ -79,9 +93,9 @@ const App = () => {
           phonebookService
             .addNewPerson(personObject)
             .then(newPerson => {
-              setMessage(`${newPerson.name} added to the phonebook!`)
+              setMessage({'message': `${newPerson.name} added to the phonebook!`})
               setTimeout(() => {
-                setMessage(null)
+                setMessage({'message': null})
               }, 3000);
               setPersons(persons.concat(newPerson))
             })
@@ -104,9 +118,9 @@ const App = () => {
     phonebookService
       .deletePerson(id)
       .then(response => {
-        setMessage(`${response.name} removed from the phonebook!`)
+        setMessage({'message': `${response.name} removed from the phonebook!`})
         setTimeout(() => {
-          setMessage(null)
+          setMessage({'message': null})
         }, 3000);
         setPersons(persons.filter(person => person.id !== response.id))
       })
@@ -126,7 +140,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <Notification message={message}/>
+      <Notification message={message.message} style={message.type? message.type : null} />
       <Filter handleFilter={handleFilter}/>
       <h2>Add new</h2>
       <PersonForm
