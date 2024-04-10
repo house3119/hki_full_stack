@@ -24,9 +24,6 @@ const App = () => {
         })
       )
       
-
-
-
     } else if (!holder) {
       console.log('holder empty, fetching countries...')
       countryService
@@ -66,20 +63,42 @@ const ListComponent = ({ result }) => {
   } else if (result.length > 10) {
     return (
       <div>
-        Too many
+        Too many matches. Please specify another filter.
       </div>
     )
   } else if (result.length === 1) {
+    const country = result[0]
+    const languageList = Object.entries(country.languages)
+
     return (
       <div>
-        {result[0].name.common}
+        <h1>{country.name.common}</h1>
+
+        <div>
+          Capital: {country.capital}
+          <br />
+          Area: {country.area}
+        </div>
+
+        <div>
+          <h2>Languages</h2>
+          <ul>
+            {languageList.map(language => <li key={language[0]}>{language[1]}</li>)}
+          </ul>
+        </div>
+
+        <div>
+          <img src={country.flags.png} alt={country.flags.alt} />
+        </div>
+
       </div>
     )
   } else {
     return (
       <div>
         <ul>
-          {result.map(country => <li key={country.altSpellings[0]}>{country.name.common}</li>)}
+          {result.map(country =>
+          <li key={country.altSpellings[0]}>{country.name.common}</li>)}
         </ul>
       </div>
     )
