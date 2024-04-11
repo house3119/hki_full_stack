@@ -41,19 +41,23 @@ const App = () => {
 
   const handleChange = (event) => {
     setQuery(event.target.value)
-  } 
+  }
+
+  const skipTo = (countryName) => {
+    setQuery(countryName.toLowerCase())
+  }
 
 
   return (
     <div>
-      Search <input type="text" onChange={handleChange}/>
-      <ListComponent result={result} />
+      Search <input type="text" onChange={handleChange} value={query}/>
+      <ListComponent result={result} skipTo={skipTo} />
     </div>
 
   )
 }
 
-const ListComponent = ({ result }) => {
+const ListComponent = ({ result, skipTo }) => {
   if (result.length === 0) {
     return (
       <div>
@@ -83,7 +87,11 @@ const ListComponent = ({ result }) => {
         <div>
           <h2>Languages</h2>
           <ul>
-            {languageList.map(language => <li key={language[0]}>{language[1]}</li>)}
+            {languageList.map(language => {
+              return (
+                <li key={language[0]}>{language[1]}</li>
+              )
+            })}
           </ul>
         </div>
 
@@ -97,8 +105,15 @@ const ListComponent = ({ result }) => {
     return (
       <div>
         <ul>
-          {result.map(country =>
-          <li key={country.altSpellings[0]}>{country.name.common}</li>)}
+          {result.map(country => {
+            return(
+              <li key={country.altSpellings[0]}>
+                {country.name.common}
+                <button onClick={() => skipTo(country.name.common)}>Show</button>
+              </li>
+            )
+          }
+          )}
         </ul>
       </div>
     )
