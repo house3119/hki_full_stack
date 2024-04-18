@@ -19,7 +19,7 @@ const App = () => {
     phonebookService
       .getAllPersons()
       .then(allPersons => setPersons(allPersons))
-      .catch(error => console.log(error))
+      .catch(() => console.log('error connecting to db'))
   }, [])
 
   const handleNameChange = (event) => {
@@ -78,16 +78,16 @@ const App = () => {
           })
       }      
     } else {
-      let current
-      phonebookService
-        .getCurrentId()
-        .then(res => {
-          current = res.current
+      
+      //phonebookService
+        //.getCurrentId()
+        //.then(res => {
+          //current = res.current
 
           const personObject = {
             name: newName,
-            number: newNumber,
-            id: current.toString()
+            number: newNumber
+            //id: ''
           }
   
           phonebookService
@@ -100,10 +100,10 @@ const App = () => {
               setPersons(persons.concat(newPerson))
             })
 
-          phonebookService
-            .incrementId(current)
-      })
-      .catch(error => console.log(error))
+          //phonebookService
+            //.incrementId(current)
+      
+      //.catch(error => console.log(error))
 
       setNewName('')
       setNewNumber('')
@@ -114,15 +114,16 @@ const App = () => {
     if (!window.confirm(`Really remove ${persons.find(person => person.id === id).name}?`)) {
       return
     }
-    
+    const personToBeDeleted = (persons.find(person => person.id === id))
+
     phonebookService
       .deletePerson(id)
-      .then(response => {
-        setMessage({'message': `${response.name} removed from the phonebook!`})
+      .then(() => {
+        setMessage({'message': `${personToBeDeleted.name} removed from the phonebook!`})
         setTimeout(() => {
           setMessage({'message': null})
         }, 3000);
-        setPersons(persons.filter(person => person.id !== response.id))
+        setPersons(persons.filter(person => person.id !== id))
       })
       .catch(error => console.log(error))
   }
