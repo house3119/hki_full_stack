@@ -17,7 +17,7 @@ const NumberList = ({personsToShow, handleDelete}) => {
 const Number = ({ name, key, number, handleDelete }) => {
   return(
     <div>
-      <span key={key}>{name} {number}</span>
+      <span key={key}>{name} {number? number : 'No number added'}</span>
       <button onClick={handleDelete}>Delete</button>
     </div>
   )

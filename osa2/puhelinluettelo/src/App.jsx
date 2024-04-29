@@ -49,6 +49,7 @@ const App = () => {
         phonebookService
           .updateNumber(personToUpdate, newNumber)
           .then((res) => {
+            console.log(res)
             setMessage({'message': `${res.name}'s number updated!`})
             setTimeout(() => {
               setMessage({'message': null})
