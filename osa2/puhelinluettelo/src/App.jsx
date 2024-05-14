@@ -14,6 +14,8 @@ const App = () => {
   const [filterApplied, setFilterApplied] = useState(false)
   const [filter, setFilter] = useState('')
   const [message, setMessage] = useState({'message': null})
+  
+  const showMessageTime = 3000
 
   useEffect(() => {
     phonebookService
@@ -49,65 +51,51 @@ const App = () => {
         phonebookService
           .updateNumber(personToUpdate, newNumber)
           .then((res) => {
-            console.log(res)
-            setMessage({'message': `${res.name}'s number updated!`})
-            setTimeout(() => {
-              setMessage({'message': null})
-            }, 3000);
-            phonebookService
+            if(!res.name) {
+              setMessage({'message': res.error, 'type': 'notification-fail'})
+              setTimeout(() => {
+                setMessage({'message': null})
+              }, showMessageTime);
+            } else {
+              setMessage({'message': `${res.name}'s number updated!`})
+              setTimeout(() => {
+                setMessage({'message': null})
+              }, showMessageTime);
+              phonebookService
               .getAllPersons()
               .then(response => {
                 setPersons(response)
                 setNewName('')
                 setNewNumber('')
               })
-          }).catch(() => {
-            setMessage({
-              'message': `Person ${personToUpdate.name} has already been removed from the phonebook`,
-              'type': 'notification-fail'
-            })
-            setTimeout(() => {
-              setMessage({'message': null})
-            }, 3000);
-            phonebookService
-            .getAllPersons()
-            .then(response => {
-              setPersons(response)
-              setNewName('')
-              setNewNumber('')
-            })
+            }
           })
       }      
     } else {
-      
-      //phonebookService
-        //.getCurrentId()
-        //.then(res => {
-          //current = res.current
 
-          const personObject = {
-            name: newName,
-            number: newNumber
-            //id: ''
+      const personObject = {
+        name: newName,
+        number: newNumber
+      }
+
+      phonebookService
+        .addNewPerson(personObject)
+        .then(res => {
+          if (!res.name) {
+            setMessage({'message': res.error, 'type': 'notification-fail'})
+            setTimeout(() => {
+              setMessage({'message': null})
+            }, showMessageTime);
+          } else {
+            setMessage({'message': `${res.name} added to the phonebook!`})
+            setTimeout(() => {
+              setMessage({'message': null})
+            }, showMessageTime);
+            setPersons(persons.concat(res))
+            setNewName('')
+            setNewNumber('')                
           }
-  
-          phonebookService
-            .addNewPerson(personObject)
-            .then(newPerson => {
-              setMessage({'message': `${newPerson.name} added to the phonebook!`})
-              setTimeout(() => {
-                setMessage({'message': null})
-              }, 3000);
-              setPersons(persons.concat(newPerson))
-            })
-
-          //phonebookService
-            //.incrementId(current)
-      
-      //.catch(error => console.log(error))
-
-      setNewName('')
-      setNewNumber('')
+        })
     }
   }
 
@@ -123,7 +111,7 @@ const App = () => {
         setMessage({'message': `${personToBeDeleted.name} removed from the phonebook!`})
         setTimeout(() => {
           setMessage({'message': null})
-        }, 3000);
+        }, showMessageTime);
         setPersons(persons.filter(person => person.id !== id))
       })
       .catch(error => console.log(error))

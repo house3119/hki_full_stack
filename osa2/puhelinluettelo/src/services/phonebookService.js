@@ -8,7 +8,7 @@ const getAllPersons = () => {
 
 const addNewPerson = newPerson => {
     const request = axios.post(baseUrl, newPerson)
-    return request.then(response => response.data)
+    return request.then(response => response.data).catch(error => error.response.data)
 }
 
 const deletePerson = personToBeDeletedId => {
@@ -19,7 +19,7 @@ const deletePerson = personToBeDeletedId => {
 const updateNumber = (personToBeUpdated, newNumber) => {
     const updatedPerson = {...personToBeUpdated, number:newNumber}
     const request = axios.put(`${baseUrl}/${personToBeUpdated.id}`, updatedPerson)
-    return request.then(response => response.data).catch(() => {console.log('error 404')})
+    return request.then(response => response.data).catch(error => error.response.data)
 }
 
 export default { getAllPersons, addNewPerson, deletePerson, updateNumber }
