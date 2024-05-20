@@ -39,6 +39,7 @@ const favoriteBlog = (blogList) => {
     return blogList.reduce(returnBigger, blogList[0])
 }
 
+
 const mostBlogs = (blogList) => {
     if (blogList.length === 0) {
         return 'empty list'
@@ -61,9 +62,37 @@ const mostBlogs = (blogList) => {
 }
 
 
+const mostLikes = (blogList) => {
+    try {
+        if (blogList.length === 0) {
+            return 'empty list'
+        }
+
+        const holderDict = {}
+        blogList.map((entry) => {
+            if (entry.author in holderDict) {
+                holderDict[entry.author] += entry.likes
+            } else {
+                holderDict[entry.author] = entry.likes
+            }
+        })
+
+        const holderList = []
+        lodash.forEach(holderDict, (value, key) => {
+            holderList.push({ 'author': key, 'likes': value })
+        })
+
+        return holderList.reduce((leader, current) => (current.likes > leader.likes)? current : leader,holderList[0])
+    } catch {
+        return 'error, please check that input is a proper blog list'
+    }
+}
+
+
 module.exports = {
     dummy,
     totalLikes,
     favoriteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
 }
