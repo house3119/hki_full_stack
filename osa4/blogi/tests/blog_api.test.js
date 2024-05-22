@@ -40,6 +40,16 @@ test('test that 2 blogs returned as json', async () => {
     assert.strictEqual(response.body.length, 2)
 })
 
+
+test('identifying field in returned blog is called "id"', async () => {
+    const response = await api.get('/api/blogs')
+    const exampleBlog = response.body[0]
+    
+    assert.strictEqual(('id' in exampleBlog), true)
+    assert.strictEqual(('_id' in exampleBlog), false)
+})
+
+
 after(async () => {
     await mongoose.connection.close()
 })
