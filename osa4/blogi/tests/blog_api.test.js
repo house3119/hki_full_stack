@@ -32,6 +32,7 @@ beforeEach(async () => {
     await blogObject.save()
 })
 
+
 test('test that 2 blogs returned as json', async () => {
     const response = await api.get('/api/blogs')
         .expect(200)
@@ -47,6 +48,24 @@ test('identifying field in returned blog is called "id"', async () => {
     
     assert.strictEqual(('id' in exampleBlog), true)
     assert.strictEqual(('_id' in exampleBlog), false)
+})
+
+test('adding a new blog works', async () => {
+    const newEntry = {   
+        "title": "Testi 2000",
+        "author": "Marko",
+        "url": "",
+        "likes": 1
+    }
+
+    await api.post('/api/blogs')
+        .send(newEntry)
+        .set('Content-Type', 'application/json')
+
+    const response = await api.get('/api/blogs')
+
+    assert.strictEqual(response.body.length, 3)
+    assert.strictEqual(response.body[2].author, 'Marko')
 })
 
 
