@@ -50,6 +50,7 @@ test('identifying field in returned blog is called "id"', async () => {
     assert.strictEqual(('_id' in exampleBlog), false)
 })
 
+
 test('adding a new blog works', async () => {
     const newEntry = {   
         "title": "Testi 2000",
@@ -66,6 +67,26 @@ test('adding a new blog works', async () => {
 
     assert.strictEqual(response.body.length, 3)
     assert.strictEqual(response.body[2].author, 'Marko')
+})
+
+
+test('when adding a blog without likes key, default to 0', async () => {
+    const exampleWithoutLikes = [
+        {
+            "title": "Taas testi 3535",
+            "author": "Jesse James",
+            "url": ""
+        }
+    ]
+
+    await api.post('/api/blogs')
+        .send(exampleWithoutLikes)
+        .set('Content-Type', 'application/json')
+
+    const response = await api.get('/api/blogs')
+
+    assert.strictEqual(response.body[2].likes, 0)
+    assert.strictEqual(response.body.length, 3)
 })
 
 
