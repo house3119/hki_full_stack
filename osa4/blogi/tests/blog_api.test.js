@@ -55,7 +55,7 @@ test('adding a new blog works', async () => {
     const newEntry = {   
         "title": "Testi 2000",
         "author": "Marko",
-        "url": "",
+        "url": "www.markonblogi.fi",
         "likes": 1
     }
 
@@ -71,13 +71,11 @@ test('adding a new blog works', async () => {
 
 
 test('when adding a blog without likes key, default to 0', async () => {
-    const exampleWithoutLikes = [
-        {
-            "title": "Taas testi 3535",
-            "author": "Jesse James",
-            "url": ""
-        }
-    ]
+    const exampleWithoutLikes = {
+        "title": "Taas testi 3535",
+        "author": "Jesse James",
+        "url": "www.jesse.ai"
+    }
 
     await api.post('/api/blogs')
         .send(exampleWithoutLikes)
@@ -87,6 +85,39 @@ test('when adding a blog without likes key, default to 0', async () => {
 
     assert.strictEqual(response.body[2].likes, 0)
     assert.strictEqual(response.body.length, 3)
+})
+
+
+test('if adding blog with no title or url, returns 400', async () => {
+    const faultyBlogs = [
+        {
+            "author": "Jimbo",
+            "url": "www.fi"
+        },
+        {
+            "title": "Jambos Blog 1",
+            "author": "Jambo"
+        },
+        {
+            "author": "Jube"
+        }
+    ]
+
+    await api.post('/api/blogs')
+        .send(faultyBlogs[0])
+        .expect(400)
+
+    await api.post('/api/blogs')
+        .send(faultyBlogs[1])
+        .expect(400)
+
+    await api.post('/api/blogs')
+        .send(faultyBlogs[2])
+        .expect(400)
+
+    const result = await api.get('/api/blogs')
+
+    assert.strictEqual(result.body.length, 2)
 })
 
 
