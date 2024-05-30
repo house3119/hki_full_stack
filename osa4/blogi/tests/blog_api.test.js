@@ -149,6 +149,67 @@ test('returns 404 when id is valid but blog with that id doesnt exist', async ()
 })
 
 
+test('updating only 1 field works', async () => {
+    let result = await api.get('/api/blogs')
+    const idOfFirstBlog = result.body[0].id
+    result = await api.put(`/api/blogs/${idOfFirstBlog}`)
+        .send({ 'title' : 'Updated Title 123' })
+        .expect(200)
+
+    assert.strictEqual(result.body.title, 'Updated Title 123')
+})
+
+
+test('updating all the fields at the same time works', async () => {
+    const updatedInfo = {
+        "url": "www.jupe.fi",
+        "likes": 9999,
+        "title": "Testi 39",
+        "author": "Jupe The Best"
+    }
+
+    let result = await api.get('/api/blogs')
+    const idOfFirstBlog = result.body[0].id
+    result = await api.put(`/api/blogs/${idOfFirstBlog}`)
+        .send(updatedInfo)
+        .expect(200)
+
+    assert.strictEqual(result.body.url, 'www.jupe.fi')
+    assert.strictEqual(result.body.likes, 9999)
+    assert.strictEqual(result.body.title, 'Testi 39')
+    assert.strictEqual(result.body.author, 'Jupe The Best')
+})
+
+
+test('returns 400 if id is not valid id', async () => {
+    await api.put('/api/blogs/123invalidId123')
+        .send({ 'title' : 'Updated Title 123' })
+        .expect(400)
+})
+
+
+test('returns 404 if id is valid, but no blog with that id is found', async () => {
+    const result = await api.get('/api/blogs')
+    const idOfFirstBlog = result.body[0].id
+
+    await api.delete(`/api/blogs/${idOfFirstBlog}`)
+    await api.put(`/api/blogs/${idOfFirstBlog}`)
+        .send({ 'title' : 'Updated Title 123' })
+        .expect(404)
+})
+
+
+test('will not update likes if input is not a valid number', async () => {
+    let result = await api.get('/api/blogs')
+    const idOfFirstBlog = result.body[0].id
+    result = await api.put(`/api/blogs/${idOfFirstBlog}`)
+        .send({ 'likes' : 'asd123' })
+        .expect(200)
+
+    assert.strictEqual(result.body.likes, 35)
+})
+
+
 after(async () => {
     await mongoose.connection.close()
 })
