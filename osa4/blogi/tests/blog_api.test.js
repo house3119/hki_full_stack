@@ -121,6 +121,34 @@ test('if adding blog with no title or url, returns 400', async () => {
 })
 
 
+test('deleting post returns 200 and blog is actually removed', async () => {
+    let result = await api.get('/api/blogs')
+    const idOfFirstBlog = result.body[0].id
+    await api.delete(`/api/blogs/${idOfFirstBlog}`)
+        .expect(200)
+
+    result = await api.get('/api/blogs')
+    assert.strictEqual(result.body.length, 1)
+})
+
+
+test('trying to delete post with invalid id returns 400', async () => {
+    await api.delete('/api/blogs/invalidTestId123')
+        .expect(400)
+})
+
+
+test('returns 404 when id is valid but blog with that id doesnt exist', async () => {
+    let result = await api.get('/api/blogs')
+    const idOfFirstBlog = result.body[0].id
+    await api.delete(`/api/blogs/${idOfFirstBlog}`)
+        .expect(200)
+
+    await api.delete(`/api/blogs/${idOfFirstBlog}`)
+        .expect(404)
+})
+
+
 after(async () => {
     await mongoose.connection.close()
 })
