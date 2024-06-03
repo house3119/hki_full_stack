@@ -6,13 +6,6 @@ const jwt = require('jsonwebtoken')
 
 
 
-const getTokenFrom = (request) => {
-    const authorization = request.get('authorization')
-    if (authorization && authorization.startsWith('Bearer ')) {
-        return authorization.replace('Bearer ', '')
-    }
-    return null
-}
 
 
 blogRouter.get('/', async (request, response, next) => {
@@ -25,7 +18,7 @@ blogRouter.post('/', async (request, response, next) => {
     try {
         const body = request.body
 
-        const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+        const decodedToken = jwt.verify(request.token, process.env.SECRET)
         if (!decodedToken.id) {
           return response.status(401).json({ error: 'token invalid' })
         }
@@ -93,13 +86,33 @@ blogRouter.delete('/:id', async (request, response, next) => {
         response.status(400).end()
 
     } else {
-        const result = await Blog.findOneAndDelete({ '_id' : request.params.id })
+        try {
+            const decodedToken = jwt.verify(request.token, process.env.SECRET)
+            const tokenUser = await User.findById(decodedToken.id)
+            const blogToBeDeleted = await Blog.findById(request.params.id)
 
-        if (result) {
-            response.status(200).json(result)
-        } else {
-            response.status(404).end()
-        }  
+            if (!tokenUser) {
+                response.status(404).send({ "error" : "User not found" })
+
+            } else if (!blogToBeDeleted) {
+                response.status(404).send({ "error" : "Blog not found, maybe already deleted" })
+
+            } else {
+                if (tokenUser._id.toString() === blogToBeDeleted.user.toString()) {
+                    const result = await Blog.findByIdAndDelete(blogToBeDeleted._id)
+                    if (!result) {
+                        response.status(404).end()
+                    } else {
+                        response.status(204).end()
+                    }
+                } else {
+                    response.status(403).send({ "message" : "Forbidden" })
+                }
+            }
+
+        } catch (error) {
+            next(error)
+        }
     }
 })
 
