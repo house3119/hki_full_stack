@@ -5,17 +5,13 @@ const User = require ('../models/user')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
-
 const api = supertest(app)
 
 
-
-
 describe('blog api tests', () => {
-    
     let TOKEN = ''
 
-    // Before suite, create test user and log that user in. Save token in TOKEN
+    // Before suite, empty TEST user collection, create test user and log that user in. Save token in TOKEN
     before(async () => {
         await User.deleteMany({ })
         await api.post('/api/users')
@@ -34,7 +30,7 @@ describe('blog api tests', () => {
         TOKEN = response.body.token
     })
 
-    // Before each test, empty test db and add 2 test blogs with the created test user
+    // Before each test, empty TEST blog collection and add 2 test blogs with the created test user
     beforeEach(async () => {
         const examples = [
             {
@@ -60,7 +56,6 @@ describe('blog api tests', () => {
         await api.post('/api/blogs')
             .send(examples[1])
             .set('Authorization', `Bearer ${TOKEN}`)
-
     })
 
     test('test that 2 blogs returned as json', async () => {
@@ -72,7 +67,6 @@ describe('blog api tests', () => {
         assert.strictEqual(response.body.length, 2)
         assert.strictEqual(true, true)
     })
-
     
     test('identifying field in returned blog is called "id"', async () => {
         const response = await api.get('/api/blogs')
