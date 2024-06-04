@@ -17,13 +17,8 @@ blogRouter.get('/', async (request, response, next) => {
 blogRouter.post('/', async (request, response, next) => {
     try {
         const body = request.body
-
-        const decodedToken = jwt.verify(request.token, process.env.SECRET)
-        if (!decodedToken.id) {
-          return response.status(401).json({ error: 'token invalid' })
-        }
-        const user = await User.findById(decodedToken.id)
-    
+        const user = request.user
+            
         const blog = new Blog({
             title: body.title,
             author: body.author,
@@ -87,18 +82,17 @@ blogRouter.delete('/:id', async (request, response, next) => {
 
     } else {
         try {
-            const decodedToken = jwt.verify(request.token, process.env.SECRET)
-            const tokenUser = await User.findById(decodedToken.id)
             const blogToBeDeleted = await Blog.findById(request.params.id)
+            console.log(request.user)
 
-            if (!tokenUser) {
+            if (!request.user) {
                 response.status(404).send({ "error" : "User not found" })
 
             } else if (!blogToBeDeleted) {
                 response.status(404).send({ "error" : "Blog not found, maybe already deleted" })
 
             } else {
-                if (tokenUser._id.toString() === blogToBeDeleted.user.toString()) {
+                if (request.user._id.toString() === blogToBeDeleted.user.toString()) {
                     const result = await Blog.findByIdAndDelete(blogToBeDeleted._id)
                     if (!result) {
                         response.status(404).end()
