@@ -1,43 +1,53 @@
-const { test, describe, after, beforeEach } = require('node:test')
+const { test, describe, after, beforeEach, before } = require('node:test')
 const assert = require('node:assert')
 const User = require('../models/user')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
-
 const api = supertest(app)
 
-const examples = [
-    {
-        "username": "TestUser1",
-        "name": "Jesse",
-        "password": "salasana123"
-    },
-    {
-        "username": "TestUser2",
-        "name": "Kille",
-        "password": "kissa35"
-    }
-]
 
 describe('users api tests', () => {
+    let TOKEN = ''
 
+    // Before each test, empty TEST user collection, create 2 test users and log first one in 
     beforeEach(async () => {
+        const examples = [
+            {
+                "username": "TestUser-1",
+                "name": "Jesse",
+                "password": "salasana123"
+            },
+            {
+                "username": "TestUser-2",
+                "name": "Kille",
+                "password": "kissa35"
+            }
+        ]
+
         await User.deleteMany({ })
-    
+
         await api.post('/api/users')
             .send(examples[0])
-    
+
         await api.post('/api/users')
             .send(examples[1])
+
+        const response = await api.post('/api/login')
+            .send({
+                username: "TestUser-1",
+                password: "salasana123"
+            })
+        TOKEN = response.body.token
     })
     
     test('beforeEach works and 2 sample users exist and data is returned as json', async () => {
         const result = await api.get('/api/users')
+            .set('Authorization', `Bearer ${TOKEN}`)
             .expect(200)
             .expect('Content-Type', /application\/json/)
     
-        assert.strictEqual(result.body.length, examples.length)
+        assert.strictEqual(result.body.length, 2)
     })
     
     test('succesfully creating user returns 201 and amount of users increases by 1', async () => {
@@ -50,8 +60,9 @@ describe('users api tests', () => {
             .expect(201)
         
         const result = await api.get('/api/users')
+            .set('Authorization', `Bearer ${TOKEN}`)
     
-        assert.strictEqual(result.body.length, examples.length + 1)
+        assert.strictEqual(result.body.length, 2 + 1)
     })
     
     test('too short username or password returns 400 and proper errormessage', async () => {
@@ -117,5 +128,6 @@ describe('users api tests', () => {
     
     after(async () => {
         await mongoose.connection.close()
+        console.log('Connection to MongoDB closed')
     })
 })

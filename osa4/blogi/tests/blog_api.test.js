@@ -150,6 +150,21 @@ describe('blog api tests', () => {
 
         assert.strictEqual(result.body.length, 2)
     })
+
+    test('trying to add blog without token returns 401', async () => {
+        const newEntry = {   
+            "title": "Testi 2000",
+            "author": "Marko",
+            "url": "www.markonblogi.fi",
+            "likes": 1
+        }
+
+        const result = await api.post('/api/blogs')
+            .send(newEntry)
+            .expect(401)
+
+        assert.strictEqual(result.body.error, 'invalid or missing token')
+    })
     
     test('deleting post returns 200 and blog is actually removed', async () => {
         let result = await api.get('/api/blogs')
@@ -252,5 +267,6 @@ describe('blog api tests', () => {
 
     after(async () => {
         await mongoose.connection.close()
+        console.log('Connection to MongoDB closed')
     })
 })
