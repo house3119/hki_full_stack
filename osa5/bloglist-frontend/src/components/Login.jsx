@@ -2,7 +2,7 @@ const Login = ({ handleLogin, username, password, handleUsernameChange, handlePa
     return (
         <div>
             <form onSubmit={ handleLogin }>
-                <label htmlFor="username">Username:</label>
+                <label htmlFor="username" className="login-label">Username:</label>
                 <input
                     id="username"
                     type="text"
@@ -10,7 +10,7 @@ const Login = ({ handleLogin, username, password, handleUsernameChange, handlePa
                     onChange={ handleUsernameChange }
                 />
                 <br />
-                <label htmlFor="password">Password: </label>
+                <label htmlFor="password" className="login-label">Password: </label>
                 <input
                     type="password"
                     name=""

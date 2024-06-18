@@ -13,10 +13,6 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
 
-  const [newBlogTitle, setNewBlogTitle] = useState('')
-  const [newBlogAuthor, setNewBlogAuthor] = useState('')
-  const [newBlogUrl, setNewBlogUrl] = useState('')
-
   const addBlogFormTogglableRef = useRef()
 
   useEffect(() => {
@@ -59,29 +55,22 @@ const App = () => {
     }
   }
 
-  const addNewBlog = async (event) => {
-    event.preventDefault()
-    if (newBlogTitle === '' || newBlogUrl === '') {
+  const addNewBlog = async ( blogDataObject ) => {
+    if (blogDataObject.title === '' || blogDataObject.url === '') {
       setMessage('Blog title and URL are required', 'error')
       return
     }
 
-    const result = await blogService.postNew({
-      'title': newBlogTitle,
-      'author': newBlogAuthor,
-      'url': newBlogUrl
-    })
+    const result = await blogService.postNew(blogDataObject)
 
     if (result.status === 201) {
       setBlogs(await blogService.getAll())
       setMessage('Blog added', 'success')
-      setNewBlogTitle('')
-      setNewBlogAuthor('')
-      setNewBlogUrl('')
       addBlogFormTogglableRef.current.toggleVisibility()
+      return blogDataObject
+
     } else {
-      console.log(result.status)
-      console.log(result.message)
+      console.log(result.status, result.message)
     }
   } 
 
@@ -129,15 +118,7 @@ const App = () => {
           {blogs.map(blog => <p key={blog.id}>{blog.title} - {blog.author? blog.author : 'No Author'}</p>)}
 
           <Togglable buttonLabel='Add new blog' ref={ addBlogFormTogglableRef }>
-            <AddBlogForm
-              addNewBlog={ addNewBlog }
-              newBlogTitle={newBlogTitle}
-              newBlogAuthor={newBlogAuthor}
-              newBlogUrl={newBlogUrl}
-              handleTitleChange={({target}) => setNewBlogTitle(target.value)}
-              handleAuthorChange={({target}) => setNewBlogAuthor(target.value)}
-              handleUrlChange={({target}) => setNewBlogUrl(target.value)}
-            />
+            <AddBlogForm addNewBlog={ addNewBlog } />
           </Togglable>
 
         </div>
