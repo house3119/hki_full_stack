@@ -1,0 +1,22 @@
+
+.blog-error-text {
+    color: red;
+    font-size: 1.2rem;
+    border: 1px solid darkred;
+    border-radius: 4px;
+    padding: 0.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    width: fit-content;
+}
+
+.blog-success-text {
+    color: green;
+    font-size: 1.2rem;
+    border: 1px solid darkgreen;
+    border-radius: 4px;
+    padding: 0.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    width: fit-content;
+}

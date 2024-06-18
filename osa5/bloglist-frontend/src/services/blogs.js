@@ -9,7 +9,7 @@ const setToken = newToken => {
 
 const getAll = async () => {
   const config = {
-    headers: { Authorization: token },
+    headers: { Authorization: token }
   }
 
   const response = await axios.get(baseUrl, config)
@@ -18,7 +18,7 @@ const getAll = async () => {
 
 const postNew = async (data) => {
   const config = {
-    headers: { Authorization: token },
+    headers: { Authorization: token }
   }
   
   try {

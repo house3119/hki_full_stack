@@ -9,7 +9,8 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
 
   const [newBlogTitle, setNewBlogTitle] = useState('')
   const [newBlogAuthor, setNewBlogAuthor] = useState('')
@@ -26,10 +27,16 @@ const App = () => {
     }
   }, [])
 
-  const setError = (error) => {
-    setErrorMessage(error)
+  const setMessage = (message, type) => {
+    if (type === 'error') {
+      setErrorMessage(message)
+    } else if (type === 'success') {
+      setSuccessMessage(message)
+    }
+
     setTimeout(() => {
-      setErrorMessage('')
+      setErrorMessage(null)
+      setSuccessMessage(null)
     }, 2000);
   }
 
@@ -46,14 +53,14 @@ const App = () => {
       setPassword('')
       setBlogs(await blogService.getAll())
     } else {
-      setError('Invalid Username and/or Password')
+      setMessage('Invalid Username and/or Password', 'error')
     }
   }
 
   const addNewBlog = async (event) => {
     event.preventDefault()
     if (newBlogTitle === '' || newBlogUrl === '') {
-      setError('Blog Name and URL required')
+      setMessage('Blog title and URL are required', 'error')
       return
     }
 
@@ -68,6 +75,7 @@ const App = () => {
       setNewBlogAuthor('')
       setNewBlogTitle('')
       setNewBlogUrl('')
+      setMessage('Blog added', 'success')
     } else {
       console.log(result.status)
       console.log(result.message)
@@ -90,8 +98,15 @@ const App = () => {
   return (
     <div>
       <h1>Blog App</h1>
-      {errorMessage}
+      <div className={errorMessage? 'blog-error-text': ''}>
+        {errorMessage}
+      </div>
+      <div className={successMessage? 'blog-success-text': ''}>
+        {successMessage}
+      </div>
+      
 
+      
       {!user &&
         <Login
           handleLogin={handleLogin}
