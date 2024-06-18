@@ -1,14 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import AddBlogForm from './components/AddBlogForm'
-import Login from './components/Login'
+import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
@@ -38,8 +36,7 @@ const App = () => {
     }, 2000);
   }
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
+  const handleLogin = async (username, password) => {
     const response = await loginService.login(username, password)
     if (response.status === 200) {
       window.localStorage.setItem(
@@ -47,8 +44,6 @@ const App = () => {
       ) 
       await blogService.setToken(response.data.token)
       setUser(response.data)
-      setUsername('')
-      setPassword('')
       setBlogs(await blogService.getAll())
     } else {
       setMessage('Invalid Username and/or Password', 'error')
@@ -80,9 +75,6 @@ const App = () => {
 
     setUser(null)
     setBlogs([])
-    setNewBlogAuthor('')
-    setNewBlogTitle('')
-    setNewBlogUrl('')
   }
 
 
@@ -90,23 +82,17 @@ const App = () => {
   return (
     <div>
       <h1>Blog App</h1>
+
       <div className={errorMessage? 'blog-error-text': ''}>
         {errorMessage}
       </div>
+
       <div className={successMessage? 'blog-success-text': ''}>
         {successMessage}
       </div>
       
-
-      
       {!user &&
-        <Login
-          handleLogin={handleLogin}
-          username={username}
-          password={password}
-          handleUsernameChange={({target}) => setUsername(target.value)}
-          handlePasswordChange={({target}) => setPassword(target.value)}
-        />
+        <LoginForm handleLogin={ handleLogin } />
       }
 
       {user &&
@@ -120,7 +106,6 @@ const App = () => {
           <Togglable buttonLabel='Add new blog' ref={ addBlogFormTogglableRef }>
             <AddBlogForm addNewBlog={ addNewBlog } />
           </Togglable>
-
         </div>
       }
       
