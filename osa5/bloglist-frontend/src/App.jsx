@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
+import AddBlogForm from './components/AddBlogForm'
 import Blog from './components/Blog'
 import Login from './components/Login'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -120,23 +122,23 @@ const App = () => {
       {user &&
         <div>
           <button onClick={handleLogout}>Log Out</button>
+
           <h2>Logged in as {user.username}</h2>
+
           {blogs.map(blog => <p key={blog.id}>{blog.title} - {blog.author? blog.author : 'No Author'}</p>)}
 
-          <h2>Add New Blog</h2>
-          <form onSubmit={addNewBlog}>
-            <label htmlFor="new-blog-title">Title</label>
-            <input type="text" id="new-blog-title" value={newBlogTitle} onChange={({target}) => setNewBlogTitle(target.value)}/>
-            <br />
-            <label htmlFor="new-blog-author">Author</label>
-            <input type="text" id="new-blog-author" value={newBlogAuthor}  onChange={({target}) => setNewBlogAuthor(target.value)}/>
-            <br />
-            <label htmlFor="new-blog-url">Url</label>
-            <input type="text" id="new-blog-url" value={newBlogUrl}  onChange={({target}) => setNewBlogUrl(target.value)}/>
-            <br />
-            <button type="submit">Add Blog</button>
-          </form>
-          <br />
+          <Togglable buttonLabel='Add new blog'>
+            <AddBlogForm
+              addNewBlog={addNewBlog}
+              newBlogTitle={newBlogTitle}
+              newBlogAuthor={newBlogAuthor}
+              newBlogUrl={newBlogUrl}
+              handleNewBlogTitleChange={({target}) => setNewBlogTitle(target.value)}
+              handleNewBlogAuthorChange={({target}) => setNewBlogAuthor(target.value)}
+              handleNewBlogUrlChange={({target}) => setNewBlogUrl(target.value)}
+            />
+          </Togglable>
+
         </div>
       }
       
