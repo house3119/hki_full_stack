@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import AddBlogForm from './components/AddBlogForm'
+import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
@@ -19,7 +20,11 @@ const App = () => {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
       blogService.setToken(user.token)
-      blogService.getAll().then(blogs => setBlogs(blogs))
+      blogService.getAll().then(blogs => {
+        setBlogs(blogs)
+      }).catch(() => {
+        logout()
+      })
     }
   }, [])
 
@@ -77,6 +82,12 @@ const App = () => {
     setBlogs([])
   }
 
+  const logout = () => {
+    window.localStorage.removeItem('loggedBlogAppUser')
+    setUser(null)
+    setBlogs([])
+  }
+
 
 
   return (
@@ -101,7 +112,16 @@ const App = () => {
 
           <h2>Logged in as { user.username }</h2>
 
-          {blogs.map(blog => <p key={blog.id}>{blog.title} - {blog.author? blog.author : 'No Author'}</p>)}
+          {blogs.map(blog =>
+            <Blog 
+              key={blog.id}
+              title={blog.title}
+              author={blog.author}
+              url={blog.url}
+              likes={blog.likes}
+              user={blog.user.username}
+            />
+          )}
 
           <Togglable buttonLabel='Add new blog' ref={ addBlogFormTogglableRef }>
             <AddBlogForm addNewBlog={ addNewBlog } />
