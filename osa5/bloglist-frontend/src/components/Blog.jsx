@@ -1,17 +1,24 @@
 import { useState } from "react"
 
 const Blog = ({
+    id,
     title,
     author,
     url,
     likes,
-    user
+    user,
+    likeBlog
 }) => {
 
     const [collapsed, setCollapsed] = useState(false)
 
     const toggleView = () => {
         setCollapsed(!collapsed)
+    }
+
+    const likeButtonClick = (event) => {
+        event.preventDefault()
+        likeBlog(id)
     }
 
     return (
@@ -22,7 +29,7 @@ const Blog = ({
             {collapsed &&
                 <div>
                     <p>Url: {url}</p>
-                    <p>Likes: {likes}<button className="blog-like-button">Like</button> </p>
+                    <p>Likes: {likes}<button className="blog-like-button" onClick={ likeButtonClick }>Like</button> </p>
                     <p>User: {user} </p>               
                 </div>
             }            

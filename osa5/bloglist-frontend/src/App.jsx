@@ -72,7 +72,17 @@ const App = () => {
     } else {
       console.log(result.status, result.message)
     }
-  } 
+  }
+
+  const likeBlog = async (id) => {
+    const response = await blogService.like(blogs.find(blog => blog.id === id))
+    
+    if (response.status === 200) {
+      setBlogs(await blogService.getAll())
+    } else {
+      setMessage('Error occurred', 'error')
+    }
+  }
 
   const handleLogout = (event) => {
     event.preventDefault()
@@ -115,11 +125,13 @@ const App = () => {
           {blogs.map(blog =>
             <Blog 
               key={blog.id}
+              id={blog.id}
               title={blog.title}
               author={blog.author}
               url={blog.url}
               likes={blog.likes}
               user={blog.user.username}
+              likeBlog={likeBlog}
             />
           )}
 

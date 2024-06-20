@@ -30,4 +30,26 @@ const postNew = async (data) => {
   
 }
 
-export default { getAll, setToken, postNew }
+const like = async(data) => {
+  const config = {
+    headers: { Authorization: token }
+  }
+
+  const updatedData = {
+    id: data.id,
+    title: data.title,
+    author: data.author,
+    likes: data.likes + 1,
+    url: data.url,
+    user: data.user.id
+  }
+
+  try {
+    const response = await axios.put(`${baseUrl}/${data.id}`, updatedData, config)
+    return {"status": response.status, "message": "Updated"}
+  } catch(err) {
+    return {"status": err.response.status, "message": err.response.data}
+  }
+}
+
+export default { getAll, setToken, postNew, like }
