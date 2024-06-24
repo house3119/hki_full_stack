@@ -56,4 +56,18 @@ const like = async(data) => {
   }
 }
 
-export default { getAll, setToken, postNew, like }
+const remove = async (id) => {
+  const config = {
+    headers: { Authorization: token }
+  }
+
+  try {
+    const response = await axios.delete(`${baseUrl}/${id}`, config)
+    return {"status": response.status, "message": "Removed"}
+  } catch(err) {
+    return {"status": err.response.status, "message": err.response.data}
+  }
+
+}
+
+export default { getAll, setToken, postNew, like, remove }

@@ -7,7 +7,9 @@ const Blog = ({
     url,
     likes,
     user,
-    likeBlog
+    likeBlog,
+    addedByCurrentLoggedInUser,
+    removeBlog
 }) => {
 
     const [collapsed, setCollapsed] = useState(false)
@@ -21,6 +23,13 @@ const Blog = ({
         likeBlog(id)
     }
 
+    const removeButtonClick = (event) => {
+        event.preventDefault()
+        if (window.confirm(`Really want to remove blog "${title}" by ${author}`)) {
+            removeBlog(id)
+        }
+    }
+
     return (
         <div className="blog-div">
             <span>{title} - by {author} </span>            
@@ -30,8 +39,12 @@ const Blog = ({
                 <div>
                     <p>Url: {url}</p>
                     <p>Likes: {likes}<button className="blog-like-button" onClick={ likeButtonClick }>Like</button> </p>
-                    <p>User: {user} </p>               
-                </div>
+                    <p>User: {user} </p>
+
+                    {addedByCurrentLoggedInUser === 'true' &&
+                        <button onClick={removeButtonClick}>Remove</button>
+                    }         
+                </div>    
             }            
         </div>
     )

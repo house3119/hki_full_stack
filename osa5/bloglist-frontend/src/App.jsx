@@ -84,6 +84,17 @@ const App = () => {
     }
   }
 
+  const removeBlog = async (id) => {
+    const response = await blogService.remove(id)
+
+    if (response.status === 204) {
+      setBlogs(await blogService.getAll())
+      setMessage('Blog removed', 'success')
+    } else {
+      setMessage('Error removing blog', 'error')
+    }
+  }
+
   const handleLogout = (event) => {
     event.preventDefault()
     window.localStorage.removeItem('loggedBlogAppUser')
@@ -132,6 +143,8 @@ const App = () => {
               likes={blog.likes}
               user={blog.user.username}
               likeBlog={likeBlog}
+              addedByCurrentLoggedInUser={blog.user.username === user.username? 'true' : 'false'}
+              removeBlog={removeBlog}
             />
           )}
 
