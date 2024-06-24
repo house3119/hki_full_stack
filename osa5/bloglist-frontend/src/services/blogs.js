@@ -24,14 +24,14 @@ const postNew = async (data) => {
   const config = {
     headers: { Authorization: token }
   }
-  
+
   try {
     const response = await axios.post(baseUrl, data, config)
-    return {"status": response.status, "message": "Created"}
+    return { 'status': response.status, 'message': 'Created' }
   } catch(err) {
-    return {"status": err.response.status, "message": err.response.data}
+    return { 'status': err.response.status, 'message': err.response.data }
   }
-  
+
 }
 
 const like = async(data) => {
@@ -50,9 +50,9 @@ const like = async(data) => {
 
   try {
     const response = await axios.put(`${baseUrl}/${data.id}`, updatedData, config)
-    return {"status": response.status, "message": "Updated"}
+    return { 'status': response.status, 'message': 'Updated' }
   } catch(err) {
-    return {"status": err.response.status, "message": err.response.data}
+    return { 'status': err.response.status, 'message': err.response.data }
   }
 }
 
@@ -63,9 +63,9 @@ const remove = async (id) => {
 
   try {
     const response = await axios.delete(`${baseUrl}/${id}`, config)
-    return {"status": response.status, "message": "Removed"}
+    return { 'status': response.status, 'message': 'Removed' }
   } catch(err) {
-    return {"status": err.response.status, "message": err.response.data}
+    return { 'status': err.response.status, 'message': err.response.data }
   }
 
 }

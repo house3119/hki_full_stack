@@ -38,7 +38,7 @@ const App = () => {
     setTimeout(() => {
       setErrorMessage(null)
       setSuccessMessage(null)
-    }, 2000);
+    }, 2000)
   }
 
   const handleLogin = async (username, password) => {
@@ -46,7 +46,7 @@ const App = () => {
     if (response.status === 200) {
       window.localStorage.setItem(
         'loggedBlogAppUser', JSON.stringify(response.data)
-      ) 
+      )
       await blogService.setToken(response.data.token)
       setUser(response.data)
       setBlogs(await blogService.getAll())
@@ -76,7 +76,7 @@ const App = () => {
 
   const likeBlog = async (id) => {
     const response = await blogService.like(blogs.find(blog => blog.id === id))
-    
+
     if (response.status === 200) {
       setBlogs(await blogService.getAll())
     } else {
@@ -122,7 +122,7 @@ const App = () => {
       <div className={successMessage? 'blog-success-text': ''}>
         {successMessage}
       </div>
-      
+
       {!user &&
         <LoginForm handleLogin={ handleLogin } />
       }
@@ -134,7 +134,7 @@ const App = () => {
           <h2>Logged in as { user.username }</h2>
 
           {blogs.map(blog =>
-            <Blog 
+            <Blog
               key={blog.id}
               id={blog.id}
               title={blog.title}
@@ -153,7 +153,7 @@ const App = () => {
           </Togglable>
         </div>
       }
-      
+
     </div>
   )
 }
