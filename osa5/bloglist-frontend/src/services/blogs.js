@@ -11,9 +11,13 @@ const getAll = async () => {
   const config = {
     headers: { Authorization: token }
   }
-
   const response = await axios.get(baseUrl, config)
-  return response.data
+  const dataSortedByLikesDesc = response.data.sort(
+    (a, b) => {
+      return (b.likes - a.likes)
+    }
+  )
+  return dataSortedByLikesDesc
 }
 
 const postNew = async (data) => {
