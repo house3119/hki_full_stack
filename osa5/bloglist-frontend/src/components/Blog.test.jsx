@@ -8,6 +8,7 @@ beforeEach(() => {
 
 })
 
+
 test('Rendered Blog component contains correct title', () => {
   const likeMockHandler = vi.fn()
   const removeMockHandler = vi.fn()
@@ -25,6 +26,7 @@ test('Rendered Blog component contains correct title', () => {
 
   const element = screen.getByText('Test Blog 1 - by Test Writer 1')
 })
+
 
 test('URL, likes and user are shown correctly after view button clicked', async () => {
   const likeMockHandler = vi.fn()
@@ -49,6 +51,7 @@ test('URL, likes and user are shown correctly after view button clicked', async 
   const likesElement = screen.getByText('Likes: 1')
   const userElement = screen.getByText('User: Tepi Testikäyttäjä')
 })
+
 
 test('If Like button is clicked twice, mock Handler is called 2 times', async () => {
   const likeMockHandler = vi.fn()
