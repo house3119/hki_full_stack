@@ -50,5 +50,23 @@ describe('Blog App E2E tests', function () {
       cy.contains('Invalid Username')
     })
   })
-  
+
+  describe('When logged in', function() {
+    beforeEach(function() {
+      cy.login({ username: 'Teppo Testaaja 69', password: 'Erittäin salainen passu 35' })
+      cy.visit('http://localhost:5173')
+    })
+
+    it('User can add new Blog', function() {
+      cy.contains('Add new blog').click()
+      cy.get('#new-blog-title').type('Test blog 123')
+      cy.get('#new-blog-author').type('Author 123')
+      cy.get('#new-blog-url').type('www.testurl123.com')
+      cy.contains('Add Blog').click()
+
+      cy.contains('Test blog 123 - by Author 123')
+    })
+
+  })
+
 })
