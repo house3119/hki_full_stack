@@ -1,8 +1,4 @@
-/*describe('template spec', () => {
-  it('passes', () => {
-    cy.visit('https://example.cypress.io')
-  })
-})*/
+
 
 describe('Blog App E2E tests', function () {
   beforeEach(function () {
@@ -24,6 +20,7 @@ describe('Blog App E2E tests', function () {
     cy.contains('Password')
     cy.contains('Login')
   })
+
 
   describe('Login', function() {
     it('Login succesful with correct username and password', function() {
@@ -51,6 +48,7 @@ describe('Blog App E2E tests', function () {
     })
   })
 
+
   describe('When logged in', function() {
     beforeEach(function() {
       cy.login({ username: 'Teppo Testaaja 69', password: 'Erittäin salainen passu 35' })
@@ -65,6 +63,28 @@ describe('Blog App E2E tests', function () {
       cy.contains('Add Blog').click()
 
       cy.contains('Test blog 123 - by Author 123')
+    })
+
+
+    describe('When blog exist', function() {
+      beforeEach(function() {
+        cy.addBlog({ title: 'Testi blog 345', author: 'Author 345', url: 'www.test345.com' })
+        cy.visit('http://localhost:5173')
+      })
+
+      it('User can like a blog', function() {
+        cy.contains('Testi blog 345 - by Author 345')
+          .parent().find('button').contains('View')
+          .click()
+
+        cy.contains('Testi blog 345 - by Author 345')
+          .parent().contains('Like')
+          .click()
+
+        cy.contains('Testi blog 345 - by Author 345')
+          .parent().contains('Likes: 1')
+      })
+
     })
 
   })
