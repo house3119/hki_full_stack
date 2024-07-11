@@ -4,12 +4,12 @@ describe('Blog App E2E tests', function () {
   beforeEach(function () {
     cy.request('POST', 'http://localhost:3003/api/test/reset')
 
-    const user = {
+    const user1 = {
       username: 'Teppo Testaaja 69',
       name: 'Teppo Töppönen',
       password: 'Erittäin salainen passu 35'
     }
-    cy.request('POST', 'http://localhost:3003/api/users', user)
+    cy.request('POST', 'http://localhost:3003/api/users', user1)
 
     cy.visit('http://localhost:5173')
   })
@@ -99,6 +99,28 @@ describe('Blog App E2E tests', function () {
           .click()
 
         cy.contains('Testi blog 345 - by Author 345').should('not.exist')
+      })
+
+      it('Only user who added a blog can see remove button for it', function() {
+        // Create new user...
+        const user2 = {
+          username: 'Keijo Kokeilija 35',
+          name: 'Keijo',
+          password: 'Keijon passu'
+        }
+        cy.request('POST', 'http://localhost:3003/api/users', user2)
+
+        // Log user in and refresh the page..
+        cy.login({ username: 'Keijo Kokeilija 35', password: 'Keijon passu' })
+        cy.visit('http://localhost:5173')
+
+        // Find blog added by the previous test user and check that remove button does not exist..
+        cy.contains('Testi blog 345 - by Author 345')
+          .parent().find('button').contains('View')
+          .click()
+
+        cy.contains('Testi blog 345 - by Author 345')
+          .parent().find('button').contains('Remove').should('not.exist')
       })
 
     })
