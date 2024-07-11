@@ -85,6 +85,22 @@ describe('Blog App E2E tests', function () {
           .parent().contains('Likes: 1')
       })
 
+      it('User can remove a blog that they added', function() {
+        cy.contains('Testi blog 345 - by Author 345')
+        .parent().find('button').contains('View')
+        .click()
+
+        cy.on('window:confirm', function(str) {
+          expect(str).to.eq('Really want to remove blog "Testi blog 345" by Author 345')
+        })
+
+        cy.contains('Testi blog 345 - by Author 345')
+          .parent().find('button').contains('Remove')
+          .click()
+
+        cy.contains('Testi blog 345 - by Author 345').should('not.exist')
+      })
+
     })
 
   })
