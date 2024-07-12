@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "cypress:open": "cypress open",
+    "test:e2e": "cypress run",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
