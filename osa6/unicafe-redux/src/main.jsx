@@ -7,6 +7,8 @@ import counterReducer from './reducer'
 const store = createStore(counterReducer)
 
 const App = () => {
+
+  
   const good = () => {
     store.dispatch({ type: 'GOOD' })
   }
@@ -22,6 +24,19 @@ const App = () => {
   const reset = () => {
     store.dispatch({ type: 'ZERO' })
   }
+
+  /*const handleClick = (action) => {
+    switch(action) {
+      case 'good':
+        store.dispatch({ type: 'GOOD' })
+      case 'ok':
+        store.dispatch({ type: 'OK' })
+      case 'bad':
+        store.dispatch({ type: 'BAD' })
+      case 'reset':
+        store.dispatch({ type: 'ZERO' })
+    }
+  }*/
   
 
 
