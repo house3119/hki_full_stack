@@ -2,13 +2,17 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const noteSlice = createSlice({
   name: 'noteState',
-  initialState: 'Initial State for Notes - TEST',
+  initialState: {note: 'Initial Note', visible: false},
   reducers: {
-    mockFunc(state, action) {
-        return state
+    changeNote(state, action) {
+      state.note = action.payload
+      state.visible = true
+    },
+    hideNote(state, action) {
+      state.visible = false
     }
   }
 })
 
-export const { mockFunc } = noteSlice.actions
+export const { changeNote, hideNote } = noteSlice.actions
 export default noteSlice.reducer
