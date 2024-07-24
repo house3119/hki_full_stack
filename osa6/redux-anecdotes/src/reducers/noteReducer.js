@@ -8,7 +8,7 @@ const noteSlice = createSlice({
       state.note = action.payload
       state.visible = true
     },
-    hideNote(state, action) {
+    hideNote(state) {
       state.visible = false
     }
   }
