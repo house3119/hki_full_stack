@@ -10,7 +10,7 @@ import { useEffect } from 'react'
 const App = () => {
   const dispatch = useDispatch()
   useEffect(() => {
-    anecdoteService.getAll().then(anecdotes => dispatch(setAnecdotes(anecdotes.initialAnecdotes)))
+    anecdoteService.getAll().then(anecdotes => dispatch(setAnecdotes(anecdotes)))
   }, [dispatch])
 
   return (
