@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { voteAnecdote } from '../reducers/anecdoteReducer'
+import { voteAnecdotes } from '../reducers/anecdoteReducer'
 import { changeNote, hideNote } from '../reducers/noteReducer'
 
 const AnecdoteList = () => {
@@ -13,7 +13,8 @@ const AnecdoteList = () => {
   const dispatch = useDispatch()
   
   const handleVote = (id) => {
-    dispatch(voteAnecdote(id))
+    const voteTarget = anecdotes.find(anec => anec.id === id)
+    dispatch(voteAnecdotes(voteTarget))
     dispatch(changeNote(`VOTED: ${anecdotes.find(anec => anec.id === id).content}!`))
     setTimeout(() => {
       dispatch(hideNote())
