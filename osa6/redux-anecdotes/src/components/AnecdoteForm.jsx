@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux"
-import { changeNote, hideNote } from "../reducers/noteReducer"
 import { newAnecdote } from "../reducers/anecdoteReducer"
+import { setNotification } from "../reducers/noteReducer"
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch()
@@ -8,8 +8,7 @@ const AnecdoteForm = () => {
   const handleNew = (event) => {
     event.preventDefault()
     dispatch(newAnecdote(event.target.anecdoteInput.value))
-    dispatch(changeNote(`ADDED: ${event.target.anecdoteInput.value}!`))
-    setTimeout(() => {dispatch(hideNote())}, 5000)
+    dispatch(setNotification(`ADDED: ${event.target.anecdoteInput.value}!`, 2))
     event.target.anecdoteInput.value = ''
   }
 

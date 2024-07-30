@@ -14,5 +14,12 @@ const noteSlice = createSlice({
   }
 })
 
+export const setNotification = (notification, time) => {
+  return async dispatch => {
+    await dispatch(changeNote(notification))
+    setTimeout(() => dispatch(hideNote()), time * 1000)
+  }
+}
+
 export const { changeNote, hideNote } = noteSlice.actions
 export default noteSlice.reducer
