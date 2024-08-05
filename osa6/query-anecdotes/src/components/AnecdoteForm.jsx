@@ -10,8 +10,11 @@ const AnecdoteForm = () => {
   const newAnecdoteMutation = useMutation({
     mutationFn: addAnecdote,
     onSuccess: () => {
-      console.log('success')
+      setMessage('Added new anecdote succesfully!')
       queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
+    },
+    onError: () => {
+      setMessage('Error! New anecdote must be at least 5 characters long.')
     }
   })
 
@@ -26,10 +29,12 @@ const AnecdoteForm = () => {
       id: Math.floor(Math.random() * 100000).toString(),
       votes: 0
     })
+  }
 
-    dispatch({ type:'CHANGE', payload:`Added: ${content}` })
+  const setMessage = (message) => {
+    dispatch({ type:'CHANGE', payload: message })
     setTimeout(() => dispatch({ type:'HIDE' }), 5000)
-}
+  }
 
   return (
     <div>
